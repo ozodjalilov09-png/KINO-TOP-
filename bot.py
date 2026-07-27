@@ -17,43 +17,23 @@ from aiogram.types import (
     WebAppInfo,
 )
 
-# --- Sozlamalar ---------------------------------------------------------
-# BotFather'dan olingan tokeningizni shu yerga yozing yoki BOT_TOKEN
-# nomli muhit o'zgaruvchisi orqali bering.
 BOT_TOKEN = os.getenv("BOT_TOKEN", "SIZNING_BOT_TOKENINGIZ")
-
-# Mini app joylashgan HTTPS manzil (masalan GitHub Pages, Vercel, Netlify).
-# Telegram Web App faqat HTTPS manzillar bilan ishlaydi — localhost ishlamaydi,
-# shuning uchun test uchun ngrok yoki shunga o'xshash xizmatdan foydalaning.
 WEBAPP_URL = os.getenv("WEBAPP_URL", "https://SIZNING-MANZILINGIZ.example/index.html")
 
-# Majburiy obuna bo'lishi kerak bo'lgan kanallar.
-# `chat_id` — bot admin qilingan kanalning username'i ("@kanal_nomi")
-# yoki raqamli ID'si (masalan -1001234567890). Xususiy kanallar uchun
-# faqat raqamli ID ishlaydi, chunki ular username'ga ega bo'lmasligi mumkin.
-# `url` — foydalanuvchi bosadigan taklif havolasi (https://t.me/... yoki https://t.me/+...).
-#
-# MUHIM: bot bu kanallarning barchasida ADMIN bo'lishi shart, aks holda
-# obunani tekshira olmaydi.
 CHANNELS = [
-    {"chat_id": -5545139622, "title": "KINO TOP 3K", "url": "https://t.me/+wGNY_UtimVJjY2Ji"},
-    {"chat_id": -5162903693, "title": "KINO TOP 2K", "url": "https://t.me/+uVePV_P2d4U2YmZi"},
-    {"chat_id": -5268298668, "title": "KINO TOP 1K", "url": "https://t.me/+TaSM_4x0JuQ4OWQy"},
+    {"chat_id": -1004456522779, "title": "Kanal", "url": "https://t.me/+h_v3VMarrg1jZDky"},
+    {"chat_id": -5045021834, "title": "Guruh", "url": "https://t.me/+nr-zepe-5bZhMzU6"},
 ]
 
 logging.basicConfig(level=logging.INFO)
 router = Router()
 
-# Obunadan o'tgan foydalanuvchilarni xotirada saqlaymiz (oddiy usul).
-# Katta/ishlab chiqarish botlarida buni ma'lumotlar bazasida saqlash tavsiya etiladi.
 verified_users: set[int] = set()
 
 
 class Form(StatesGroup):
     waiting_name = State()
 
-
-# --- Yordamchi funksiyalar ------------------------------------------------
 
 def subscribe_keyboard() -> InlineKeyboardMarkup:
     buttons = [
@@ -80,7 +60,6 @@ def webapp_keyboard() -> InlineKeyboardMarkup:
 
 
 async def is_subscribed(bot: Bot, user_id: int) -> bool:
-    """Foydalanuvchi barcha kanallarga obuna bo'lganini tekshiradi."""
     allowed_statuses = {
         ChatMemberStatus.MEMBER,
         ChatMemberStatus.ADMINISTRATOR,
@@ -92,7 +71,6 @@ async def is_subscribed(bot: Bot, user_id: int) -> bool:
             if member.status not in allowed_statuses:
                 return False
         except Exception as e:
-            # Bot kanalda admin bo'lmasa yoki chat_id noto'g'ri bo'lsa shu yerga tushadi.
             logging.warning("Obunani tekshirishda xatolik (%s): %s", ch["chat_id"], e)
             return False
     return True
@@ -102,8 +80,6 @@ async def ask_name(message: Message, state: FSMContext):
     await state.set_state(Form.waiting_name)
     await message.answer("Zo'r! Endi, iltimos, ismingizni yozing:")
 
-
-# --- Handlerlar -----------------------------------------------------------
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
