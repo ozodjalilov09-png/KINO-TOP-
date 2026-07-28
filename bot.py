@@ -32,7 +32,7 @@ ADMIN_IDS = {
 
 CHANNELS = [
     {"chat_id": -1004456522779, "title": "Kanal", "url": "https://t.me/+h_v3VMarrg1jZDky"},
-    {"chat_id": -5045021834, "title": "Guruh", "url": "https://t.me/+nr-zepe-5bZhMzU6"},
+    {"chat_id": -1004317457717, "title": "Guruh", "url": "https://t.me/+nr-zepe-5bZhMzU6"},
 ]
 
 DATA_FILE = "users_data.json"
